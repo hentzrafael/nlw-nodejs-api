@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import fs from 'fs';
+import { resolve } from 'path';
 import { getCustomRepository } from "typeorm";
 import { SurveysUsersRepository } from "../repositories/SurveysUsersRepository";
 import { AppError } from '../errors/AppError';
@@ -25,9 +27,13 @@ class AnswerController {
 
         await surveysUsersRepository.save(surveyUser);
 
-        return response.json(surveyUser);
-    }
+        const successPath = resolve(__dirname, "..", "views", "pages", "confirmationMail.hbs")
 
+        const html = fs.readFileSync(successPath).toString("utf-8");
+
+        return response.send(html);
+
+    }
 }
 
 export { AnswerController };
